@@ -1,0 +1,58 @@
+<div class="row">
+    {{> messages }}
+    <div class="col-12">
+        <div class="media mt-5 mb-5 d-flex flex-column flex-md-row">
+            <img src="{{results.Poster}}" class="mr-4 img-thumbnail" alt="...">
+            <div class="media-body">
+                <h5 class="mt-0">{{results.Title}}</h5>
+                <p class="card-text">{{results.Plot}}</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><span class="font-weight-bold">Genre: </span>{{results.Genre}}</li>
+                    <li class="list-group-item"><span class="font-weight-bold">Writer: </span>{{results.Writer}}</li>
+                    <li class="list-group-item"><span class="font-weight-bold">Actors: </span>{{results.Actors}}</li>
+                    <li class="list-group-item"><span class="font-weight-bold">Awards: </span>{{results.Awards}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        <h2 class="mb-3">Add a Review</h2>
+        <form action="/movie/add-review" method="POST">
+            <div class="form-group">
+                <input type="string" id="review" name="reviewString" class="form-control" placeholder="What do you think?" value="{{#if reviewString}} {{reviewString}} {{/if}}" />
+            </div>
+            <div class="form-group">
+                <input type="number" id="rating" name="rating" class="form-control" placeholder="1-5" value="{{#if rating}} {{rating}} {{/if}}" />
+            </div>
+
+            <input type="hidden" name="movieID" value="{{results.imdbID}}" />
+            <input type="hidden" name="movieName" value="{{results.Title}}" />
+            <input type="hidden" name="imgURL" value="{{results.Poster}}" />
+            {{#if login}}
+            <button type="submit" class="btn btn-primary btn-block mt-3">Add Review</button>
+            {{else}}
+            <a class="btn btn-secondary btn-block mt-3" href="/users/login" role="button">Please login to add a review</a>
+            {{/if}}
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-sm-12 mt-5 mb-5">
+        <h5>Reviews</h5>
+        {{#if reviews}}
+        <ul class="list-group list-group-flush">
+            {{#each reviews}}
+            <li class="list-group-item">
+                <p>{{this.userName}} <span>{{this.date}}</span></p>
+                <span class="badge badge-primary">{{this.rating}} of 5</span>
+                <span>{{this.reviewString}}</span>
+            </li>
+            {{/each}}
+        </ul>
+        {{else}}
+        <p>No reviews yet - be the first!</p>
+        {{/if}}
+    </div>
+</div>
