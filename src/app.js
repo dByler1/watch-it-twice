@@ -28,10 +28,10 @@ app.use(helmet())
 require('./config/passport')(passport);
 
 // DB Config
-const db = require('./config/keys').MongoURI;
+// const db = require('./config/keys').MongoURI;
 
 // Connect to Mongo
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
