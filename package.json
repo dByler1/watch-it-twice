@@ -1,6 +1,9 @@
 {
   "name": "express-hbs-movies",
   "version": "0.0.0",
+  "engines": {
+    "node": "v11.9.0"
+  },
   "private": true,
   "scripts": {
     "start": "npm run prod",
@@ -8,7 +11,7 @@
     "server:prod": "node ./dist/bin/www",
     "dev": "NODE_ENV=development npm-run-all server:dev",
     "clean": "rimraf dist",
-    "build": "babel .src --out-dir dist",
+    "build": "babel ./src --out-dir dist",
     "prod": "NODE_ENV=production npm-run-all clean build server:prod",
     "watch": "nodemon"
   },
@@ -41,6 +44,7 @@
     "rimraf": "^3.0.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.7.7",
     "@babel/core": "^7.7.5",
     "@babel/node": "^7.7.4",
     "@babel/preset-env": "^7.7.6",
