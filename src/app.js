@@ -11,6 +11,8 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 const MongoStore = require('connect-mongo')(session);
 
