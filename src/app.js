@@ -29,9 +29,6 @@ app.use(helmet())
 //Passport Config
 require('./config/passport')(passport);
 
-// DB Config
-// const db = require('./config/keys').MongoURI;
-
 // Connect to Mongo
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB Connected...'))

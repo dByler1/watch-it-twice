@@ -14,7 +14,7 @@
 <div class="row mt-5 mb-5">
     <div class="col-md-6 m-auto">
         <ul class="list-unstyled">
-            {{#each reviews}}
+            {{#withSort reviews reverse='true'}}
             <li class="media">
                 <a class="d-flex" href="/movie/detail/{{this.movieID}}" role="button" aria-hidden="true">
                     {{#if this.imgURL}}
@@ -32,7 +32,7 @@
                     </div>
                 </a>
             </li>
-            {{/each}}
+            {{/withSort}}
         </ul>
     </div>
 
