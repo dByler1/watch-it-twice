@@ -7,8 +7,6 @@ const router = express.Router();
 
 //Movie Search
 router.get('/', (req, res, next) => { 
-  
-
   const niceDate = (arr) => {
     return new Promise( (resolve, reject) => {
       const reviews = arr.map( (el) => {

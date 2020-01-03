@@ -6,13 +6,10 @@
   },
   "private": true,
   "scripts": {
-    "start": "npm run prod",
-    "server:dev": "babel-node ./src/bin/www",
-    "server:prod": "node ./dist/bin/www",
-    "dev": "NODE_ENV=development npm-run-all server:dev",
+    "build": "babel src -d dist",
     "clean": "rimraf dist",
-    "build": "babel ./src --out-dir dist",
-    "prod": "NODE_ENV=production npm-run-all server:prod",
+    "dev": "NODE_ENV=development && babel-node ./src/bin/www",
+    "start": "NODE_ENV=production && npm run clean && npm run build && node dist/bin/www.js",
     "watch": "nodemon"
   },
   "dependencies": {
