@@ -9,25 +9,31 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-12">
+    <div class="col-12 col-md-8">
 
         <h4 class="mb-3 text-uppercase lead">{{search_term}}</h4>
         <ul class="list-unstyled">
             {{#each results}}
-                <li class="media mb-4">
-                    <a class="d-flex" href="/movie/detail/{{this.imdbID}}" role="button">
-                        {{#contains this.Poster 'N/A' }}
-                        {{else}}
-                        <img src="{{this.Poster}}" class="mr-3 w-25 img-thumbnail" alt="...">
-                        {{/contains}}
-                        <div class="media-body">
-                            <h5 class="mt-3 mb-1 text-body">{{this.Title}}</h5>
-                            <ul class="list-group">
-                                <li class="list-group-item text-secondary border-top-0 border-right-0 border-left-0"><span class="font-weight-bold">Year: </span>{{this.Year}}</li>
-                                <li class="list-group-item text-secondary border-top-0 border-right-0 border-left-0"><span class="font-weight-bold">Type: </span>{{this.Type}}</li>
-                            </ul>
-                        </div>
-                    </a>
+                <li class="media mb-4 d-flex align-items-center">
+                    {{#contains this.Poster 'N/A' }}
+                    <div class="poster-resize mr-3">
+                        <div class="poster-na poster img-thumbnail">No Poster Available</div>
+                    </div>
+
+                    {{else}}
+                    <div class="poster-resize mr-3">
+                        <div class="poster img-thumbnail" style="background: url('{{this.Poster}}') no-repeat center; background-size: contain;"></div>
+                    </div>
+                    {{!-- <img src="{{this.Poster}}" class="mr-3 w-25 " alt="..."> --}}
+                    {{/contains}}
+                    <div class="media-body">
+                        <a href="/movie/detail/{{this.imdbID}}" role="button"><h5 class="mt-3 mb-1 text-body">{{this.Title}}</h5></a>
+                        
+                        <ul class="list-group">
+                            <li class="list-group-item text-secondary border-top-0 border-right-0 border-left-0"><span class="font-weight-bold">Year: </span>{{this.Year}}</li>
+                            <li class="list-group-item text-secondary border-top-0 border-right-0 border-left-0"><span class="font-weight-bold">Type: </span>{{this.Type}}</li>
+                        </ul>
+                    </div>
                 </li>
             {{else}}
                 <p class="mb-5">Sorry, there were no results. Please search again.</p>

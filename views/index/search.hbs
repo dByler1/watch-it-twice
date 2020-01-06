@@ -12,25 +12,25 @@
     </div>
 </div>
 <div class="row mt-5 mb-5">
-    <div class="col-md-6 m-auto">
+    <div class="col-12 col-md-8 offset-md-4 m-auto">
         <ul class="list-unstyled">
             {{#withSort reviews reverse='true'}}
-            <li class="media">
-                <a class="d-flex" href="/movie/detail/{{this.movieID}}" role="button" aria-hidden="true">
-                    {{#if this.imgURL}}
-                    <img class="mr-3 w-25 img-thumbnail" src="{{this.imgURL}}" alt="{{this.movieName}} poster" aria-hidden="true" />
-                    {{/if}}
-                    <div class="media-body">
-                        <h5 class="mt-3 mb-1 text-body">{{this.movieName}}</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <p class="text-capitalize text-secondary">{{this.userName}} <span>{{this.date}}</span></p>
-                                <span class="badge badge-primary">{{this.rating}} of 5</span>
-                                <span class="text-secondary">{{this.reviewString}}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </a>
+            <li class="media d-flex mb-4 align-items-center p-0 p-md-3">
+                {{#if this.imgURL}}
+                <div class="poster-resize mr-3">
+                    <div class="poster img-thumbnail" style="background: url('{{this.imgURL}}') no-repeat center; background-size: contain;"></div>
+                </div>
+                {{/if}}
+                <div class="media-body">
+                    <a href="/movie/detail/{{this.movieID}}" role="button"><h5 class="mt-3 mb-1 text-body">{{this.movieName}}</h5></a>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <p class="text-capitalize text-secondary">{{this.userName}} <span>{{this.date}}</span></p>
+                            <span class="badge badge-primary">{{this.rating}} of 5</span>
+                            <span class="text-secondary">{{this.reviewString}}</span>
+                        </li>
+                    </ul>
+                </div>
             </li>
             {{/withSort}}
         </ul>

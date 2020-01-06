@@ -1,1 +1,27 @@
 
+.poster-resize {
+    max-width: 150px;
+    width: 100%;
+}
+
+.poster-resize .poster {
+  width: 100%;
+  padding-top: 142%;
+  background-size: contain;
+}
+
+/* padding-top equation */
+/* (height) / (width) = ? */
+
+.poster-resize .poster-na {
+    background: #A09F9F;
+    color: #fff;
+}
+
+/*=== Small Screens ===*/
+
+@media (max-width: 568px) {
+    .poster-resize {
+        max-width: 75px;
+    }
+}
