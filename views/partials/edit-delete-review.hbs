@@ -1,0 +1,56 @@
+<!-- Edit review Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalTitle">Edit Review</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/review/edit" method="POST">
+                    <div>
+                        <label for="reviewString">Review:</label>
+                        <input id="reviewString" name="reviewString" type="text" />
+                    </div>
+                    <div class="mt-2">
+                        <label for="rating">Rating 1-5</label>
+                        <input id="rating" name="rating" type="number" />
+                    </div>
+                    <input name="id" id="reviewID" type="hidden" />
+                    <input name="path" id="editReviewPath" type="hidden" />
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+                    <div class="modal-footer mt-3">
+                        <button type="submit" role="button" class="btn btn-secondary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete review Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalTitle">Delete Review</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <form action="/review/delete" method="POST">
+                    <input type="hidden" name="id" id="deleteReviewID">
+                    <input name="path" id="deleteReviewPath" type="hidden" />
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+                    <button type="submit" class="btn btn-danger">Delete Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

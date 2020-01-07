@@ -39,7 +39,8 @@ exports.index = async (req, res, next) => {
 
     return res.render('movie/movie-detail', {
         results: results.data,
-        reviews: reviews
+        reviews: reviews,
+        user: req.user
     })
     
 }
