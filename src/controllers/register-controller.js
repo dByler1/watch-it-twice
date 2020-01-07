@@ -13,7 +13,7 @@ exports.index = (req, res) => {
 
     //Check if password1 and password2 match
     if (password != password2) {
-        errors.push({ msg: 'Please confirm the password' });
+        errors.push({ msg: "Passwords don't match." });
     }
 
     if (errors.length > 0) {
@@ -22,7 +22,8 @@ exports.index = (req, res) => {
             name,
             email,
             password,
-            password2
+            password2,
+            csrfToken: req.csrfToken()
         });
     } else {
         //Validation passed
