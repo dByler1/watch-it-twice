@@ -2,6 +2,10 @@ import passport from 'passport';
 const LocalStrategy = require('passport-local').Strategy;
 import bcrypt from 'bcryptjs';
 
+import passportJWT from 'passport-jwt'
+const JwtStrategy = passportJWT.Strategy;
+const ExtractJwt = passportJWT.ExtractJwt;
+
 //Load User Model
 import User from '../models/User';
 
@@ -14,9 +18,29 @@ passport.deserializeUser( (id, done) => {
         done(err, user);
     });
 });
+
+
+// passport.use( new JwtStrategy({
+//     jwtFromRequest: ExtractJwt.fromAuthheaderAsBearerToken(),
+//     secretOrKey: process.env.JWT_Pass
+//     }, (jwtPayload, cb) => {
+
+//     //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
+//     return User.findOneById(jwtPayload.id)
+//         .then(user => {
+//             return cb(null, user);
+//         })
+//         .catch(err => {
+//             return cb(err);
+//         });
+//     }
+// ));
+
+
 module.exports = function(passport) {
     passport.use( new LocalStrategy({ 
-    usernameField: 'email'
+    usernameField: 'email',
+    passwordField: 'password'
     }, (email, password, done) => {
         // Match user
         User.findOne({
@@ -30,7 +54,7 @@ module.exports = function(passport) {
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if (err) throw err;
                 if (isMatch) {
-                    return done(null, user);
+                    return done(null, user), {message: 'Logged in successfully'};
                 } else {
                     return done(null, false, { message: 'Password incorrect' });
                 }
