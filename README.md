@@ -1,6 +1,9 @@
 # watch-it-twice
 Watch it Twice
 
+Stateless REST API with token based authentication
+Providing endpoints for watchittwice.com
+
 ## Dev Server
 npm run watch to start the dev server (nodemon, babel-node)
 
