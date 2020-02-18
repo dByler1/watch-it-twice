@@ -44,7 +44,8 @@ exports.login = (req, res, next) => {
 
     const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
     const [email, password] = new Buffer(b64auth, 'base64').toString().split(':')
-    console.log()
+    console.log(b64auth)
+    console.log( email, password)
 
     console.log(req.headers.authorization)
     let loadedUser;
