@@ -43,7 +43,7 @@ exports.register = function (req, res, next) {
 exports.login = (req, res, next) => {
 
     const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
-    const [email, password] = new Buffer(b64auth, 'base64').toString().split(':')
+    const [email, password] = buffer.from(b64auth, 'base64').toString().split(':')
     console.log(b64auth)
     console.log( email, password)
 
@@ -52,9 +52,10 @@ exports.login = (req, res, next) => {
     User.findOne({email: email})
     .then(user => {
         if (!user) {
-            const error = new Error('A user with this email address could not be found');
-            error.statusText = 'A user with this email address could not be found'
-            res.status(401).send(error)
+            res.status(401).json({
+                msg: 'A user with this email address could not be found',
+                error: error
+            })
             throw error
         }
         loadedUser = user;
@@ -62,9 +63,10 @@ exports.login = (req, res, next) => {
     })
     .then(isEqual => {
         if (!isEqual) {
-            const error = new Error('Wrong password');
-            error.statusText = "Wrong password"
-            res.status(401).send(error)
+            res.status(401).json({
+                msg: "Wrong password",
+                error: error
+            })
             throw error
         }
 
@@ -78,11 +80,7 @@ exports.login = (req, res, next) => {
         res.status(200).json({token: token })
     })
     .catch(err => {
-        if (!err.statusCode) {
-            res.status(500).send(err)
-            next(err)
-        }
-        res.send(err)
+        res.status(500).send(err)
         next(err)
     })
 }
