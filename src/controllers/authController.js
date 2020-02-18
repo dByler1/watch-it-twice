@@ -43,7 +43,7 @@ exports.register = function (req, res, next) {
 exports.login = (req, res, next) => {
 
     const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
-    const [email, password] = buffer.from(b64auth, 'base64').toString().split(':')
+    const [email, password] = Buffer.from(b64auth, 'base64').toString().split(':')
     console.log(b64auth)
     console.log( email, password)
 
