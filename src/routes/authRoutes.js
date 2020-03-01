@@ -30,11 +30,11 @@ router.post('/register',[
 router.post('/login', authController.login)
 
 //Logout Handle
-router.get('/logout', (req, res) => {
-    req.logout();
-    req.flash('success_msg', 'You are logged out');
-    // res.send('/users/login');
-});
+// router.get('/logout', (req, res) => {
+//     req.logout();
+//     req.flash('success_msg', 'You are logged out');
+//     // res.send('/users/login');
+// });
 
 //Change password handle
 router.post('/change-password', (req, res, next) => {

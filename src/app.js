@@ -9,7 +9,7 @@ import "regenerator-runtime/runtime";
 
 // import indexRouter from './routes/index';
 import userRoutes from './routes/users';
-// import movieRouter from './routes/movie';
+import searchRoutes from './routes/search';
 import reviewRoutes from './routes/review';
 import authRoutes from './routes/authRoutes';
 
@@ -45,6 +45,7 @@ app.use(logger('dev'));
 app.use('/auth', authRoutes)
 app.use('/review', reviewRoutes)
 app.use('/user', userRoutes)
+app.use('/search', searchRoutes)
 
 // catch 404 and forward to error handler
 // app.use( (req, res, next) => {

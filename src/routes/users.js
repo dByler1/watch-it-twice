@@ -6,7 +6,7 @@ import Review from '../models/Reveiw';
 import User from '../models/User';
 
 
-router.get('/get-email/:userID', (req, res, next) => {
+router.get('/get-email/:userID', authCheck, (req, res, next) => {
   const userID = req.params.userID;
   User.findById(userID, 'email').exec()
   .then(data => {

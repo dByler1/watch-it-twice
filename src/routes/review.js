@@ -2,6 +2,8 @@ import express from 'express';
 const router = express.Router();
 import moment from 'moment';
 import authCheck from '../config/check-auth-token';
+import axios from 'axios';
+import _ from 'lodash';
 
 import Review from '../models/Reveiw';
 
@@ -23,6 +25,20 @@ router.get('/all-reviews', (req, res, next) => {
             })
         })
 })
+
+const api = async (uri, data) => {
+    try {
+        const { data: response } = await axios({
+            url: domain + uri,
+            method: 'POST',
+            data,
+        });
+
+        return response.data;
+    } catch (error) {
+        throw error.response.data;
+    }
+};
 
 // Get reviews by movie ID
 router.get('/reviews-by-id/:id', (req, res, next) => {
@@ -65,15 +81,20 @@ router.post('/add-review', authCheck, (req, res, next) => {
     console.log(req.body)
     const user = req.decoded.userID;
     let errors = [];
-
+    
     //check required fields
-    if (!reviewString || !rating) {
+    if (!rating) {
+        errors.push({ msg: 'Please add a rating' });
+    }
+
+    if (!reviewString && !rating) {
         errors.push({ msg: 'Please fill in all fields' });
     }
 
     if (errors.length > 0) {
-        return res.status(401).send(errors)
+        return res.status(406).send(errors)
     } else {
+
         //Validation passed    
         const newReview = new Review({
             reviewString,
@@ -100,14 +121,32 @@ router.post('/add-review', authCheck, (req, res, next) => {
 router.post('/edit-review', authCheck, (req, res, next) => {
     const {reviewString, rating, id} = req.body;
 
-    Review.findByIdAndUpdate(id, {reviewString: reviewString, rating: rating}).exec()
-    .then( data => {
-        res.status(200).send(data)
-    })
-    .catch(err => {
-        res.status(400).send(err)
-        next(err)
-    })
+    let errors = [];
+
+    //check required fields
+
+    if (!rating) {
+        errors.push({ msg: 'Please add a rating' });
+    }
+
+    if (!reviewString && !rating) {
+        errors.push({ msg: 'Please fill in all fields' });
+    }
+
+    if (errors.length > 0) {
+        return res.status(406).send(errors)
+    } else { 
+        Review.findByIdAndUpdate(id, {reviewString: reviewString, rating: rating}).exec()
+        .then( data => {
+            res.status(200).send(data)
+        })
+        .catch(err => {
+            res.status(400).send(err)
+            next(err)
+        })
+    }
+
+    
 });
 
 //Review delete handle
