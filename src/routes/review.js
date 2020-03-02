@@ -26,20 +26,6 @@ router.get('/all-reviews', (req, res, next) => {
         })
 })
 
-const api = async (uri, data) => {
-    try {
-        const { data: response } = await axios({
-            url: domain + uri,
-            method: 'POST',
-            data,
-        });
-
-        return response.data;
-    } catch (error) {
-        throw error.response.data;
-    }
-};
-
 // Get reviews by movie ID
 router.get('/reviews-by-id/:id', (req, res, next) => {
     Review.find({ movieID: req.params.id }).lean().exec()
@@ -78,9 +64,21 @@ router.get('/reviews-by-user/:userID', (req, res, next) => {
 //Review Handle
 router.post('/add-review', authCheck, (req, res, next) => {
     const { reviewString, rating, movieID, movieName, imgURL, userName } = req.body;
-    console.log(req.body)
     const user = req.decoded.userID;
     let errors = [];
+
+    const checkForExistingReview = () => {
+        return new Promise((resolve, reject) => {
+            Review.find({ user: user, movieID: movieID }).lean().exec()
+                .then(data => {
+                    console.log('checking for duplicates ' + data )
+                    resolve(data)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }
     
     //check required fields
     if (!rating) {
@@ -94,26 +92,41 @@ router.post('/add-review', authCheck, (req, res, next) => {
     if (errors.length > 0) {
         return res.status(406).send(errors)
     } else {
+        //check for existing review 
+        checkForExistingReview()
+        .then(data => {
+            console.log(data)
+            if (data.length > 0) {
+                return res.status(400).send('Aleady reviewed this movie')
+            } else {
+                //Validation passed    
+                const newReview = new Review({
+                    reviewString,
+                    rating,
+                    movieID,
+                    movieName,
+                    user,
+                    userName,
+                    imgURL
+                })
 
-        //Validation passed    
-        const newReview = new Review({
-            reviewString,
-            rating,
-            movieID,
-            movieName,
-            user,
-            userName,
-            imgURL
+                newReview.save()
+                    .then(review => {
+                        return res.status(200).send(review);
+                    })
+                    .catch(err => {
+                        res.status(400).send(err)
+                        return next(err)
+                    })
+            }
+            
+        })
+        .catch(err => {
+            res.status(400).send(err)
+            return next(err)
         })
 
-        newReview.save()
-            .then(review => {
-                res.status(200).send(review);
-            })
-            .catch(err => {
-                res.status(400).send(err)
-                next(err)
-            })
+        
     }
 });
 
@@ -123,30 +136,72 @@ router.post('/edit-review', authCheck, (req, res, next) => {
 
     let errors = [];
 
+    const updateReview = (newString, newRating) => {
+        return new Promise((resolve, reject) => {
+            Review.findByIdAndUpdate(id, { reviewString: newString, rating: newRating }).exec()
+                .then(data => {
+                    resolve(data)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }
+
     //check required fields
 
-    if (!rating) {
-        errors.push({ msg: 'Please add a rating' });
-    }
+    // if (!rating) {
+    //     errors.push({ msg: 'Please add a rating' });
+    // }
 
     if (!reviewString && !rating) {
         errors.push({ msg: 'Please fill in all fields' });
     }
 
     if (errors.length > 0) {
-        return res.status(406).send(errors)
+        res.status(406).send(errors)
+        return next(errors);
     } else { 
-        Review.findByIdAndUpdate(id, {reviewString: reviewString, rating: rating}).exec()
-        .then( data => {
-            res.status(200).send(data)
-        })
-        .catch(err => {
-            res.status(400).send(err)
-            next(err)
-        })
-    }
 
-    
+        if (!rating) {
+            console.log('no rating')
+             Review.find({ _id: id }).lean().exec()
+            .then(data => {
+                console.log(data[0].rating)
+                if (!data[0].rating) {
+                    //throw an error
+                    console.log('no old rating either')
+                    return res.status(406).send('Please add a review')
+                } else {
+                    updateReview(reviewString, data[0].rating)
+                    .then(data => {
+                        console.log(data)
+                        return res.status(200).send(data) 
+                    })
+                    .catch(err => {
+                        res.status(400).send(err) 
+                        return next(err.response)
+                    })
+                    
+                }
+            })
+            .catch(err => {
+                res.status(400).send(err)
+                return next(err)
+            }) 
+        } else if (rating) {
+            updateReview(reviewString, rating)
+                .then(data => {
+                    console.log(data)
+                    return res.status(200).send(data)
+                })
+                .catch(err => {
+                    res.status(400).send(err)
+                    return next(err.response)
+                })
+        }
+
+    }
 });
 
 //Review delete handle
