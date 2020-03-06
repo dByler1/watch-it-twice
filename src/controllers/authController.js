@@ -52,22 +52,16 @@ exports.login = (req, res, next) => {
     User.findOne({email: email})
     .then(user => {
         if (!user) {
-            res.status(401).json({
-                msg: 'A user with this email address could not be found',
-                error: error
-            })
-            throw error
+            res.status(401).send('A user with this email address could not be found')
+            return next('A user with this email address could not be found')
         }
         loadedUser = user;
         return bcrypt.compare(password, user.password);
     })
     .then(isEqual => {
         if (!isEqual) {
-            res.status(401).json({
-                msg: "Wrong password",
-                error: error
-            })
-            throw error
+            res.status(401).send("Wrong password")
+            return next('Wrong password')
         }
 
         const token = jwt.sign({
