@@ -12,6 +12,7 @@ import userRoutes from './routes/users';
 import searchRoutes from './routes/search';
 import reviewRoutes from './routes/review';
 import authRoutes from './routes/authRoutes';
+import forgotPassworrdRoutes from './routes/resetPasswordRoutes';
 
 const app = express();
 app.use(express.json());
@@ -46,6 +47,7 @@ app.use('/auth', authRoutes)
 app.use('/review', reviewRoutes)
 app.use('/user', userRoutes)
 app.use('/search', searchRoutes)
+app.use('/reset', forgotPassworrdRoutes)
 
 // catch 404 and forward to error handler
 // app.use( (req, res, next) => {

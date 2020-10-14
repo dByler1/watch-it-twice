@@ -50,7 +50,7 @@ router.post('/change-password', (req, res, next) => {
 
     //Check if password1 and password2 match
     if (password != password2) {
-        errors.push({ msg: 'Please confirm the password' });
+        errors.push({ msg: 'Please confirm the password.' });
     }
 
     if (errors.length > 0) {

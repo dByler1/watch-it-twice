@@ -22,7 +22,11 @@ exports.register = function (req, res, next) {
     //Hash Password
     bcrypt.genSalt(12, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) throw err;
+            if (err) {
+                res.status(400).json({msg: 'Error hashing password', error: err})
+                return next(err)
+            }
+
             //set password to hashed
             newUser.password = hash;
             //save user
@@ -31,24 +35,18 @@ exports.register = function (req, res, next) {
                     return res.status(201).json({userName: user.name, email: user.email});
                 })
                 .catch(err => {
-                    if(!err.statusCode) {
-                        err.statusCode = 500;
-                        next(err)
-                    }
+                    res.status(400).json({ msg: 'Error hashing password', error: err })
+                    return next(err)
                 })
         })
     })
 };
 
 exports.login = (req, res, next) => {
-
     const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
     const [email, password] = Buffer.from(b64auth, 'base64').toString().split(':')
-    console.log(b64auth)
-    console.log( email, password)
-
-    console.log(req.headers.authorization)
     let loadedUser;
+
     User.findOne({email: email})
     .then(user => {
         if (!user) {
@@ -75,6 +73,6 @@ exports.login = (req, res, next) => {
     })
     .catch(err => {
         res.status(500).send(err)
-        next(err)
+        return next(err)
     })
 }
